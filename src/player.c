@@ -1,6 +1,16 @@
-#include <raylib.h>
-
 #include "player.h"
+
+void
+init_player(Player *player, const int screen_width, const int screen_height)
+{
+    Vector2 position = {(float)screen_width / PI, (float)screen_height / 2};
+    Vector2 velocity = {0.0f, 0.0f};
+    Vector2 acceleration = {0.0f, 50.0f * GRAVITY};
+
+    player->position = position;
+    player->velocity = velocity;
+    player->acceleration = acceleration;
+}
 
 void
 update_player(Player *player)
