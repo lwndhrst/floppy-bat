@@ -1,5 +1,7 @@
 #include "player.h"
 
+#define GRAVITY 9.81f
+
 void
 init_player(Player *player, const int screen_width, const int screen_height)
 {

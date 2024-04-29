@@ -2,8 +2,6 @@
 
 #include <raylib.h>
 
-#define GRAVITY 9.81f
-
 typedef struct {
     Vector2 position;
     Vector2 velocity;
