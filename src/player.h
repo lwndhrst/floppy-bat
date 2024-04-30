@@ -8,6 +8,6 @@ typedef struct {
     Vector2 acceleration;
 } Player;
 
-void init_player(Player *player);
+void init_player(Player *player, int screen_width, int screen_height);
 void update_player(Player *player, float delta_time);
 void draw_player(Player *player);

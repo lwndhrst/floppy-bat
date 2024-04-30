@@ -3,11 +3,11 @@
 #define GRAVITY 9.81f
 
 void
-init_player(Player *player)
+init_player(Player *player, int screen_width, int screen_height)
 {
-    Vector2 position = {(float)GetScreenWidth() / PI, (float)GetScreenHeight() / 2.0f};
+    Vector2 position = {(float)screen_width / PI, (float)screen_height / 2.0f};
     Vector2 velocity = {0.0f, 0.0f};
-    Vector2 acceleration = {0.0f, 50.0f * GRAVITY};
+    Vector2 acceleration = {0.0f, 100.0f * GRAVITY};
 
     player->position = position;
     player->velocity = velocity;
@@ -18,7 +18,7 @@ void
 update_player(Player *player, float delta_time)
 {
     if (IsKeyPressed(KEY_SPACE)) {
-        player->velocity.y -= 200.0f;
+        player->velocity.y -= 300.0f;
     }
 
     player->velocity.y += delta_time * player->acceleration.y;
