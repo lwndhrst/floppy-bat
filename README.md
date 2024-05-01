@@ -11,11 +11,11 @@ git clone https://github.com/lwndhrst/floppy-bat.git --recursive
 ### Debug
 
 ```sh
-cmake -B build/debug -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=DEBUG
+cmake -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=DEBUG
 ```
 
 ```sh
-cmake --build build/debug
+cmake --build build
 ```
 
 ### Release
