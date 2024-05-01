@@ -4,6 +4,10 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_GENERATOR "Unix Makefiles")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+add_compile_options(
+    $<$<CONFIG:RELEASE>:-O2>
+)
+
 # add raylib
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
