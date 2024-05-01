@@ -32,7 +32,8 @@ init_obstacle_system(ObstacleSystem *obstacle_system, int screen_width, int scre
     for (int i = 0; i < num_obstacles; ++i)
     {
         Obstacle obstacle;
-        obstacle.x = screen_width + i * OBSTACLE_TOTAL_PIXELS;
+        obstacle.x = screen_width + OBSTACLE_DISTANCE_PIXELS + i * OBSTACLE_TOTAL_PIXELS;
+        obstacle.prev_x = obstacle.x;
 
         randomize_opening_position(&obstacle, screen_height);
         obstacles[i] = obstacle;
@@ -61,6 +62,7 @@ update_obstacles(ObstacleSystem *obstacle_system, float delta_time)
     {
         Obstacle *obstacle = &obstacle_system->obstacles[i];
 
+        obstacle->prev_x = obstacle->x;
         obstacle->x -= obstacle_system->scroll_speed * delta_time;
         if (obstacle->x < -OBSTACLE_WIDTH_PIXELS)
         {
@@ -100,10 +102,12 @@ check_collisions(ObstacleSystem *obstacle_system, Player *player)
         Obstacle *obstacle = &obstacle_system->obstacles[i];
 
         float dx = player->position.x - obstacle->x;
-        if (0.0f < dx && dx < OBSTACLE_WIDTH_PIXELS)
+        if (dx > 0.0f &&
+            dx < OBSTACLE_WIDTH_PIXELS)
         {
             float dy = player->position.y - obstacle->top_height;
-            if (dy < 0.0f || OBSTACLE_OPENING_PIXELS < dy)
+            if (dy < 0.0f ||
+                dy > OBSTACLE_OPENING_PIXELS)
             {
                 return true;
             }
@@ -111,4 +115,21 @@ check_collisions(ObstacleSystem *obstacle_system, Player *player)
     }
 
     return false;
+}
+
+int
+calc_score(ObstacleSystem *obstacle_system, Player *player)
+{
+    for (int i = 0; i < obstacle_system->num_obstacles; ++i)
+    {
+        Obstacle *obstacle = &obstacle_system->obstacles[i];
+
+        if (player->position.x <= obstacle->prev_x + (float)(OBSTACLE_WIDTH_PIXELS >> 1) &&
+            player->position.x >= obstacle->x + (float)(OBSTACLE_WIDTH_PIXELS >> 1))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }

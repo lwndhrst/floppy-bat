@@ -6,10 +6,11 @@
 
 typedef struct {
     float x;
+    float prev_x;
     float top_y;
     float bot_y;
-	float top_height;
-	float bot_height;
+    float top_height;
+    float bot_height;
 } Obstacle;
 
 typedef struct {
@@ -28,3 +29,4 @@ void update_obstacles(ObstacleSystem *obstacle_system, float delta_time);
 void draw_obstacles(ObstacleSystem *obstacle_system);
 
 bool check_collisions(ObstacleSystem *obstacle_system, Player *player);
+int calc_score(ObstacleSystem *obstacle_system, Player *player);
