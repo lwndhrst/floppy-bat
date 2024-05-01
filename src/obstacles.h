@@ -2,8 +2,14 @@
 
 #include <raylib.h>
 
+#include "player.h"
+
 typedef struct {
-    Vector2 position;
+    float x;
+    float top_y;
+    float bot_y;
+	float top_height;
+	float bot_height;
 } Obstacle;
 
 typedef struct {
@@ -17,5 +23,8 @@ typedef struct {
 
 void init_obstacle_system(ObstacleSystem *obstacle_system, int screen_width, int screen_height);
 void destroy_obstacle_system(ObstacleSystem *obstacle_system);
+
 void update_obstacles(ObstacleSystem *obstacle_system, float delta_time);
 void draw_obstacles(ObstacleSystem *obstacle_system);
+
+bool check_collisions(ObstacleSystem *obstacle_system, Player *player);

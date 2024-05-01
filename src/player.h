@@ -11,3 +11,5 @@ typedef struct {
 void init_player(Player *player, int screen_width, int screen_height);
 void update_player(Player *player, float delta_time);
 void draw_player(Player *player);
+
+bool check_out_of_bounds(Player *player, int screen_width, int screen_height);

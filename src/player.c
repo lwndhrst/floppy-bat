@@ -5,7 +5,7 @@
 void
 init_player(Player *player, int screen_width, int screen_height)
 {
-    Vector2 position = {(float)screen_width / PI, (float)screen_height / 2.0f};
+    Vector2 position = {(float)(screen_width >> 2), (float)(screen_height >> 1)};
     Vector2 velocity = {0.0f, 0.0f};
     Vector2 acceleration = {0.0f, 100.0f * GRAVITY};
 
@@ -17,7 +17,8 @@ init_player(Player *player, int screen_width, int screen_height)
 void
 update_player(Player *player, float delta_time)
 {
-    if (IsKeyPressed(KEY_SPACE)) {
+    if (IsKeyPressed(KEY_SPACE))
+    {
         player->velocity.y -= 300.0f;
     }
 
@@ -29,4 +30,10 @@ void
 draw_player(Player *player)
 {
     DrawCircleV(player->position, 16.0f, BLACK);
+}
+
+bool
+check_out_of_bounds(Player *player, int screen_width, int screen_height)
+{
+    return player->position.y < 0.0f || screen_height < player->position.y;
 }

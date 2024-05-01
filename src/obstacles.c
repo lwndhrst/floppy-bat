@@ -10,11 +10,16 @@
 #define SCROLL_SPEED 100.0f
 #define SCROLL_ACCEL 10.0f
 
-int
-get_random_bounded_y_coord(int screen_height)
+void
+randomize_opening_position(Obstacle *obstacle, int screen_height)
 {
     int margin = OBSTACLE_OPENING_PIXELS;
-    return GetRandomValue(0 + margin, screen_height - margin);
+    float y = GetRandomValue(0 + margin, screen_height - margin);
+
+    obstacle->top_y = 0.0f;
+    obstacle->top_height = y - (float)(OBSTACLE_OPENING_PIXELS >> 1);
+    obstacle->bot_y = y + (float)(OBSTACLE_OPENING_PIXELS >> 1);
+    obstacle->bot_height = (float)screen_height - obstacle->bot_y;
 }
 
 void
@@ -24,12 +29,12 @@ init_obstacle_system(ObstacleSystem *obstacle_system, int screen_width, int scre
 
     Obstacle *obstacles = malloc(num_obstacles * sizeof(Obstacle));
 
-    for (int i = 0; i < num_obstacles; ++i) {
-        Vector2 position = {
-            (float)(screen_width + i * OBSTACLE_TOTAL_PIXELS),
-            get_random_bounded_y_coord(screen_height)};
+    for (int i = 0; i < num_obstacles; ++i)
+    {
+        Obstacle obstacle;
+        obstacle.x = screen_width + i * OBSTACLE_TOTAL_PIXELS;
 
-        Obstacle obstacle = {position};
+        randomize_opening_position(&obstacle, screen_height);
         obstacles[i] = obstacle;
     }
 
@@ -52,33 +57,58 @@ update_obstacles(ObstacleSystem *obstacle_system, float delta_time)
 {
     obstacle_system->scroll_speed += obstacle_system->scroll_accel * delta_time;
 
-    for (int i = 0; i < obstacle_system->num_obstacles; ++i) {
+    for (int i = 0; i < obstacle_system->num_obstacles; ++i)
+    {
         Obstacle *obstacle = &obstacle_system->obstacles[i];
 
-        float x = obstacle->position.x - (obstacle_system->scroll_speed * delta_time);
-        if (x < -OBSTACLE_WIDTH_PIXELS) {
-            int idx = (i + (obstacle_system->num_obstacles - 1)) % obstacle_system->num_obstacles;
-            x = obstacle_system->obstacles[idx].position.x + OBSTACLE_TOTAL_PIXELS;
-            obstacle->position.y = get_random_bounded_y_coord(obstacle_system->screen_height);
+        obstacle->x -= obstacle_system->scroll_speed * delta_time;
+        if (obstacle->x < -OBSTACLE_WIDTH_PIXELS)
+        {
+            int rightmost_idx = (i + obstacle_system->num_obstacles - 1) % obstacle_system->num_obstacles;
+            obstacle->x = obstacle_system->obstacles[rightmost_idx].x + OBSTACLE_TOTAL_PIXELS;
+            randomize_opening_position(obstacle, obstacle_system->screen_height);
         }
-
-        obstacle->position.x = x;
     }
 }
 
 void
 draw_obstacles(ObstacleSystem *obstacle_system)
 {
-    for (int i = 0; i < obstacle_system->num_obstacles; ++i) {
+    for (int i = 0; i < obstacle_system->num_obstacles; ++i)
+    {
         Obstacle *obstacle = &obstacle_system->obstacles[i];
 
-        Vector2 start_pos_top = {obstacle->position.x, 0.0f};
-        Vector2 end_pos_top = {obstacle->position.x, obstacle->position.y - (OBSTACLE_OPENING_PIXELS >> 1)};
+        DrawRectangle(obstacle->x,
+                      obstacle->top_y,
+                      OBSTACLE_WIDTH_PIXELS,
+                      obstacle->top_height,
+                      PURPLE);
 
-        Vector2 start_pos_bot = {obstacle->position.x, obstacle->position.y + (OBSTACLE_OPENING_PIXELS >> 1)};
-        Vector2 end_pos_bot = {obstacle->position.x, obstacle_system->screen_height};
-
-        DrawLineEx(start_pos_top, end_pos_top, OBSTACLE_WIDTH_PIXELS, PURPLE);
-        DrawLineEx(start_pos_bot, end_pos_bot, OBSTACLE_WIDTH_PIXELS, PURPLE);
+        DrawRectangle(obstacle->x,
+                      obstacle->bot_y,
+                      OBSTACLE_WIDTH_PIXELS,
+                      obstacle->bot_height,
+                      PURPLE);
     }
+}
+
+bool
+check_collisions(ObstacleSystem *obstacle_system, Player *player)
+{
+    for (int i = 0; i < obstacle_system->num_obstacles; ++i)
+    {
+        Obstacle *obstacle = &obstacle_system->obstacles[i];
+
+        float dx = player->position.x - obstacle->x;
+        if (0.0f < dx && dx < OBSTACLE_WIDTH_PIXELS)
+        {
+            float dy = player->position.y - obstacle->top_height;
+            if (dy < 0.0f || OBSTACLE_OPENING_PIXELS < dy)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
