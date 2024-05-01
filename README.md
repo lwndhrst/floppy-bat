@@ -2,6 +2,10 @@
 
 Flappy Bird but it's a Floppy Bat.
 
+```sh
+git clone https://github.com/lwndhrst/floppy-bat.git --recursive
+```
+
 ## Building
 
 ### Debug
