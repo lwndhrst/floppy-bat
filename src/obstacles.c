@@ -108,7 +108,7 @@ check_collisions(ObstacleSystem *obstacle_system, Player *player)
         {
             float dy = player->position.y - obstacle->top_height;
             if (dy + player->hitbox_offset_top < 0.0f ||
-                dy - player->hitbox_offset_bot + player->sprite_height > OBSTACLE_OPENING_PIXELS)
+                dy + player->sprite_height > OBSTACLE_OPENING_PIXELS + player->hitbox_offset_bot)
             {
                 return true;
             }

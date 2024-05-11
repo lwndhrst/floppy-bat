@@ -18,7 +18,7 @@ init_player(Player *player, int screen_width, int screen_height)
     player->sprite_height = 64;
 
     player->hitbox_offset_top = player->sprite_height >> 2;
-    player->hitbox_offset_bot = player->sprite_height >> 2;
+    player->hitbox_offset_bot = player->sprite_height >> 3;
 }
 
 void
