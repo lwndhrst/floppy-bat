@@ -14,11 +14,11 @@ init_player(Player *player, int screen_width, int screen_height)
     player->acceleration = acceleration;
 
     player->spritesheet = LoadTexture(TextFormat("%s/spritesheets/bat.png", ASSETS_PATH));
-    player->sprite_width = 64;
-    player->sprite_height = 64;
+    player->sprite_width = 16 << 2;
+    player->sprite_height = 16 << 2;
 
     player->hitbox_offset_top = player->sprite_height >> 2;
-    player->hitbox_offset_bot = player->sprite_height >> 3;
+    player->hitbox_offset_bot = player->sprite_height >> 2;
 }
 
 void
@@ -38,12 +38,12 @@ draw_player(Player *player)
 {
     Rectangle player_rect = {player->position.x, player->position.y, player->sprite_width, player->sprite_height};
 
-    const size_t frame_width = 16;
-    const size_t frame_height = 16;
-    const size_t num_frames = 4;
+    const int frame_width = 16;
+    const int frame_height = 16;
+    const int num_frames = 4;
 
     Rectangle frames[num_frames];
-    for (size_t i = 0; i < num_frames; ++i)
+    for (int i = 0; i < num_frames; ++i)
     {
         frames[i] = (Rectangle){i * frame_width, 0, frame_width, frame_height};
     }

@@ -20,6 +20,10 @@ typedef struct {
     float scroll_accel;
     int num_obstacles;
     Obstacle *obstacles;
+
+    Texture2D spritesheet;
+    int sprite_width;
+    int sprite_height;
 } ObstacleSystem;
 
 void init_obstacle_system(ObstacleSystem *obstacle_system, int screen_width, int screen_height);
