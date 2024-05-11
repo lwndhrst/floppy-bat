@@ -1,5 +1,6 @@
 #include "obstacles.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 
 #define OBSTACLE_DISTANCE_PIXELS 250
@@ -102,12 +103,12 @@ check_collisions(ObstacleSystem *obstacle_system, Player *player)
         Obstacle *obstacle = &obstacle_system->obstacles[i];
 
         float dx = player->position.x - obstacle->x;
-        if (dx > 0.0f &&
+        if (dx + player->sprite_width > 0.0f &&
             dx < OBSTACLE_WIDTH_PIXELS)
         {
             float dy = player->position.y - obstacle->top_height;
             if (dy < 0.0f ||
-                dy > OBSTACLE_OPENING_PIXELS)
+                dy + player->sprite_height > OBSTACLE_OPENING_PIXELS)
             {
                 return true;
             }
