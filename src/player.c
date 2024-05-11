@@ -16,6 +16,9 @@ init_player(Player *player, int screen_width, int screen_height)
     player->spritesheet = LoadTexture(TextFormat("%s/spritesheets/bat.png", ASSETS_PATH));
     player->sprite_width = 64;
     player->sprite_height = 64;
+
+    player->hitbox_offset_top = player->sprite_height >> 2;
+    player->hitbox_offset_bot = player->sprite_height >> 2;
 }
 
 void
@@ -68,5 +71,6 @@ draw_player(Player *player)
 bool
 check_out_of_bounds(Player *player, int screen_width, int screen_height)
 {
-    return player->position.y < 0.0f || screen_height < player->position.y + player->sprite_height;
+    return player->position.y + player->hitbox_offset_top < 0.0f ||
+           screen_height + player->hitbox_offset_bot < player->position.y + player->sprite_height;
 }
