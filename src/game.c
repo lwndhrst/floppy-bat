@@ -7,11 +7,14 @@ init_game(Game *game, int screen_width, int screen_height)
 {
     game->screen_width = screen_width;
     game->screen_height = screen_height;
+    game->sprite_scale = screen_height / 100;
+
     game->score = 0;
     game->score_x = screen_width >> 3;
     game->score_y = game->score_x;
-    init_player(&game->player, screen_width, screen_height);
-    init_obstacle_system(&game->obstacle_system, screen_width, screen_height);
+
+    init_player(&game->player, screen_width, screen_height, game->sprite_scale);
+    init_obstacle_system(&game->obstacle_system, screen_width, screen_height, game->sprite_scale);
 }
 
 void

@@ -6,8 +6,8 @@
 int
 main(void)
 {
-    const int screen_width = 600;
-    const int screen_height = 400;
+    const int screen_width = 1600;
+    const int screen_height = 900;
 
     InitWindow(screen_width, screen_height, "Floppy Bat");
 

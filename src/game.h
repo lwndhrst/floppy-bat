@@ -10,6 +10,7 @@ typedef struct {
     ObstacleSystem obstacle_system;
     int screen_width;
     int screen_height;
+    int sprite_scale;
     int score;
     int score_x;
     int score_y;
